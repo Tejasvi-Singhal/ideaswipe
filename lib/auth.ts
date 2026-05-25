@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { db } from "@/lib/db";
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   database: prismaAdapter(db, {
     provider: "postgresql",
   }),
@@ -10,16 +11,8 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false,
   },
-  user: {
-    additionalFields: {
-      name: {
-        type: "string",
-        required: true,
-      },
-    },
-  },
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    expiresIn: 60 * 60 * 24 * 7,
   },
 });
 
