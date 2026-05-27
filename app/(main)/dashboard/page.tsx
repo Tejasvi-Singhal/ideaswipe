@@ -61,6 +61,24 @@ export default function DashboardPage() {
               </p>
             </div>
           </Link>
+          <Link href="/connections">
+            <div className="border border-slate-800 rounded-xl p-6 hover:border-indigo-500 transition cursor-pointer bg-slate-900">
+              <div className="text-3xl mb-3">🔔</div>
+              <h2 className="text-white font-semibold text-lg">Connection Requests</h2>
+              <p className="text-slate-400 text-sm mt-1">
+                See who liked your ideas and approve connections
+              </p>
+            </div>
+          </Link>
+          <Link href="/matches">
+            <div className="border border-slate-800 rounded-xl p-6 hover:border-indigo-500 transition cursor-pointer bg-slate-900">
+              <div className="text-3xl mb-3">🤝</div>
+              <h2 className="text-white font-semibold text-lg">Your Matches</h2>
+              <p className="text-slate-400 text-sm mt-1">
+                Chat with people you've connected with
+              </p>
+            </div>
+          </Link>
         </div>
       </div>
     </div>
