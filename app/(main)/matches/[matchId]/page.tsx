@@ -123,16 +123,14 @@ export default function ChatPage() {
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col">
       {/* Navbar */}
-      <nav className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-        <Link href="/matches">
-          <div className="flex items-center gap-2">
-            <span className="text-slate-400">←</span>
-            <span className="text-white font-semibold">Back to Matches</span>
-          </div>
+      <nav className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950 sticky top-0 z-50">
+        <Link href="/matches" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
+          <span>←</span>
+          <span className="font-medium">Back to Matches</span>
         </Link>
         <div className="flex items-center gap-2">
-          <span className="text-2xl">💡</span>
-          <span className="text-xl font-bold text-white">IdeaSwipe</span>
+          <span className="text-xl">💡</span>
+          <span className="text-lg font-bold text-white">IdeaSwipe</span>
         </div>
       </nav>
 

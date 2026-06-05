@@ -67,19 +67,6 @@ export default function ConnectionsPage() {
 
   return (
     <div className="min-h-screen bg-slate-950">
-      <nav className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-        <Link href="/dashboard">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">💡</span>
-            <span className="text-xl font-bold text-white">IdeaSwipe</span>
-          </div>
-        </Link>
-        <Link href="/dashboard">
-          <Button variant="outline" className="border-slate-700 text-slate-300">
-            Dashboard
-          </Button>
-        </Link>
-      </nav>
 
       <div className="max-w-2xl mx-auto px-4 py-10">
         <h1 className="text-3xl font-bold text-white mb-2">

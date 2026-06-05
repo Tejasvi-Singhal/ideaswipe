@@ -67,21 +67,6 @@ export default function SwipePage() {
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col">
-      {/* Navbar */}
-      <nav className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-        <Link href="/dashboard">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">💡</span>
-            <span className="text-xl font-bold text-white">IdeaSwipe</span>
-          </div>
-        </Link>
-        <Link href="/dashboard">
-          <Button variant="outline" className="border-slate-700 text-slate-300">
-            Dashboard
-          </Button>
-        </Link>
-      </nav>
-
       {/* Swipe Area */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
         {ideas.length === 0 ? (
