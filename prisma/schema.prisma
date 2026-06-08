@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified Boolean  @default(false)
+  name          String
+  avatarUrl     String?
+  bio           String?
+  skills        String[]
+  role          Role      @default(OTHER)
+  linkedinUrl   String?
+  githubUrl     String?
+  twitterUrl    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  ideas               Idea[]
+  swipes              Swipe[]
+  sentRequests        ConnectionRequest[]   @relation("SentRequests")
+  receivedRequests    ConnectionRequest[]   @relation("ReceivedRequests")
+  matchesAsSwiper     Match[]               @relation("MatchSwiper")
+  matchesAsOwner      Match[]               @relation("MatchOwner")
+  sentMessages        Message[]
+  milestones          Milestone[]
+  streaks             Streak[]
+  aiFeedbackRequests  AIFeedback[]
+  sessions  Session[]
+  accounts  Account[]
+}
+
+model Idea {
+  id            String    @id @default(cuid())
+  title         String
+  tagline       String
+  description   String
+  problem       String
+  solution      String
+  targetMarket  String
+  stage         Stage     @default(CONCEPT)
+  tags          String[]
+  coverImageUrl String?
+  secretDetails String?
+  isPublished   Boolean   @default(false)
+  authorId      String
+  author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  swipes              Swipe[]
+  connectionRequests  ConnectionRequest[]
+  matches             Match[]
+  milestones          Milestone[]
+  streaks             Streak[]
+  aiFeedback          AIFeedback[]
+}
+
+model Swipe {
+  id        String         @id @default(cuid())
+  swiperId  String
+  ideaId    String
+  direction SwipeDirection
+  createdAt DateTime       @default(now())
+
+  swiper    User           @relation(fields: [swiperId], references: [id], onDelete: Cascade)
+  idea      Idea           @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  @@unique([swiperId, ideaId])
+}
+
+model ConnectionRequest {
+  id        String           @id @default(cuid())
+  ideaId    String
+  swiperId  String
+  ownerId   String
+  status    ConnectionStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+
+  idea      Idea             @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  swiper    User             @relation("SentRequests", fields: [swiperId], references: [id], onDelete: Cascade)
+  owner     User             @relation("ReceivedRequests", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@unique([swiperId, ideaId])
+}
+
+model Match {
+  id        String    @id @default(cuid())
+  ideaId    String
+  swiperId  String
+  ownerId   String
+  createdAt DateTime  @default(now())
+
+  idea      Idea      @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  swiper    User      @relation("MatchSwiper", fields: [swiperId], references: [id], onDelete: Cascade)
+  owner     User      @relation("MatchOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  messages  Message[]
+
+  @@unique([swiperId, ideaId])
+}
+
+model Message {
+  id        String    @id @default(cuid())
+  matchId   String
+  senderId  String
+  content   String
+  isRead    Boolean   @default(false)
+  createdAt DateTime  @default(now())
+
+  match     Match     @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  sender    User      @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model Milestone {
+  id          String    @id @default(cuid())
+  ideaId      String
+  userId      String
+  title       String
+  isCompleted Boolean   @default(false)
+  isPublic    Boolean   @default(true)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  idea        Idea      @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Streak {
+  id             String    @id @default(cuid())
+  userId         String
+  ideaId         String
+  currentStreak  Int       @default(0)
+  longestStreak  Int       @default(0)
+  lastActiveDate DateTime?
+  createdAt      DateTime  @default(now())
+
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  idea           Idea      @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, ideaId])
+}
+
+model AIFeedback {
+  id              String   @id @default(cuid())
+  ideaId          String
+  requestedById   String
+  validationScore Int
+  strengths       Json
+  weaknesses      Json
+  suggestions     Json
+  createdAt       DateTime @default(now())
+
+  idea            Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  requestedBy     User     @relation(fields: [requestedById], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  FOUNDER
+  DEVELOPER
+  DESIGNER
+  MARKETER
+  OTHER
+}
+
+enum Stage {
+  CONCEPT
+  BUILDING
+  LAUNCHED
+}
+
+enum SwipeDirection {
+  LIKE
+  PASS
+}
+
+enum ConnectionStatus {
+  PENDING
+  APPROVED
+  DECLINED
+}
