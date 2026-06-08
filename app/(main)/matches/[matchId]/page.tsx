@@ -60,7 +60,7 @@ export default function ChatPage() {
             ...message,
             sender: {
               id: message.senderId,
-              name: message.senderName,
+              name: message.senderName || "Unknown",
             },
           }];
         });
