@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node --project tsconfig.server.json server.ts",
+    "dev": "next dev",
+    "dev:socket": "ts-node --project tsconfig.server.json server.ts",
     "build": "next build",
-    "start": "NODE_ENV=production ts-node --project tsconfig.server.json server.ts",
+    "start": "next start",
+    "start:socket": "ts-node --project tsconfig.server.json socket-server.ts",
     "lint": "next lint",
     "db:push": "dotenv -e .env.local -- prisma db push",
     "db:studio": "dotenv -e .env.local -- prisma studio",

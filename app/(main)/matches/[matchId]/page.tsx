@@ -47,7 +47,7 @@ export default function ChatPage() {
       setLoading(false);
 
       // Connect socket
-      const socket = io();
+      const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001");
       socketRef.current = socket;
 
       socket.emit("join-match", matchId);

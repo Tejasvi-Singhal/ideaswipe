@@ -9,5 +9,5 @@
     "outDir": ".server",
     "skipLibCheck": true
   },
-  "include": ["server.ts"]
+  "include": ["server.ts", "socket-server.ts"]
 }
