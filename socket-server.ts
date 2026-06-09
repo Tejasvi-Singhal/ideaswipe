@@ -5,9 +5,10 @@ const httpServer = createServer();
 
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"],
   },
+  transports: ["websocket", "polling"],
 });
 
 io.on("connection", (socket) => {
