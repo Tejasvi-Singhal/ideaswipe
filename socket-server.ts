@@ -13,7 +13,7 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
-
+  
   socket.on("join-match", (matchId: string) => {
     socket.join(matchId);
     console.log(`Socket ${socket.id} joined match ${matchId}`);
