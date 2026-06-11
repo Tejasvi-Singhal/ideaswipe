@@ -7,8 +7,9 @@ const io = new Server(httpServer, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
+    credentials: false,
   },
-  transports: ["websocket", "polling"],
+  allowEIO3: true,
 });
 
 io.on("connection", (socket) => {
